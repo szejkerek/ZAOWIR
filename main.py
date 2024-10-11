@@ -101,17 +101,13 @@ def calculate_reprojection_error(objpoints, imgpoints, mtx, dist, rvecs, tvecs):
 
 if __name__ == "__main__":
     image_dir = os.path.join(os.getcwd(), 'Dataset', 'Chessboard', 'Mono 1', 'cam4')
-    rows, columns, end = 7, 10, 60
 
     ret, mtx, dist, rvecs, tvecs = calibrate_chessboard(image_dir)
 
     if mtx is not None:
-        # Calculate reprojection error
         mean_error = calculate_reprojection_error(objpoints, imgpoints, mtx, dist, rvecs, tvecs)
-
-        # Save calibration data and error
         calibration_data = {
-            "mean_reprojection_error": mean_error,  # Save the reprojection error
+            "mean_reprojection_error": mean_error,
             "ret": ret,
             "mtx": mtx.tolist(),
             "dist": dist.tolist(),
