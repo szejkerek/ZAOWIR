@@ -9,7 +9,7 @@ debugMode = False
 squareSizeInMilimeters = 28.67
 columns = 10
 rows = 7
-end = 40 
+end = 0 
 alpha = 0.3
 image_dir = os.path.join(os.getcwd(), 'Dataset', 'Chessboard', 'Mono 1', 'cam4')
 criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
@@ -57,7 +57,7 @@ def RemappImage(mtx, dist, image_name):
     mapx, mapy = cv.initUndistortRectifyMap(mtx, dist, None, newcameramtx, (w,h), 5)
     dst = cv.remap(img, mapx, mapy, cv.INTER_LINEAR)
     x, y, w, h = roi
-    remappedImage = dst[y:y+h, x:x+w]
+    remapped_image = dst[y:y+h, x:x+w]
     cv.imwrite('remapped_image.png', remapped_image)
 
 if __name__ == "__main__":   
@@ -99,6 +99,6 @@ if __name__ == "__main__":
     SaveToJson(ret, mtx, dist, rvecs, tvecs, mean_error)
 
 
-    undistorted_img = UndistortPhoto(mtx, dist, "47.png")
-    remapped_image = RemappImage(mtx, dist, "47.png")
+    undistorted_img = UndistortPhoto(mtx, dist, "58.png")
+    remapped_image = RemappImage(mtx, dist, "58.png")
 
