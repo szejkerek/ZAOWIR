@@ -5,14 +5,13 @@ import cv2 as cv
 import logging
 import time
 
-debugMode = False
+debugMode = True
 squareSizeInMilimeters = 28.67
-columns = 10
 rows = 7
-end = 40 
+columns = 10
+end = 0 
 alpha = 0.3
 image_dir = os.path.join(os.getcwd(), 'Dataset', 'Chessboard', 'Mono 1', 'cam4')
-criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
 objpoints = []
 imgpoints = []
@@ -41,26 +40,31 @@ def SaveToJson(ret, mtx, dist, rvecs, tvecs, mean_error):
     with open('calibration_data.json', 'w') as json_file:
         json.dump(calibration_data, json_file, indent=4)
 
-def UndistortPhoto(mtx, dist, image_name):
-    img = cv.imread(os.path.join(image_dir, image_name))
+def UndistortPhoto(mtx, dist):
+    img = cv.imread(os.path.join(image_dir, "58.png"))
     h, w = img.shape[:2]
     newcameramtx, roi = cv.getOptimalNewCameraMatrix(mtx, dist, (w, h), alpha, (w, h))
     dst = cv.undistort(img, mtx, dist, None, newcameramtx)
     x, y, w, h = roi
     undistorted_img = dst[y:y + h, x:x + w]
-    cv.imwrite('undistorted_image.png', undistorted_img)
+    return undistorted_img
 
-def RemappImage(mtx, dist, image_name):
-    img = cv.imread(os.path.join(image_dir, image_name))
+def RemappImage(mtx, dist):
+    img = cv.imread(os.path.join(image_dir, "58.png"))
     h, w = img.shape[:2]
     newcameramtx, roi = cv.getOptimalNewCameraMatrix(mtx, dist, (w, h), alpha, (w, h))
+
+    # undistort
     mapx, mapy = cv.initUndistortRectifyMap(mtx, dist, None, newcameramtx, (w,h), 5)
     dst = cv.remap(img, mapx, mapy, cv.INTER_LINEAR)
+    
+    # crop the image
     x, y, w, h = roi
     remappedImage = dst[y:y+h, x:x+w]
-    cv.imwrite('remapped_image.png', remapped_image)
+    return remappedImage
 
-if __name__ == "__main__":   
+if __name__ == "__main__":
+    criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
     objp = np.zeros((rows * columns, 3), np.float32)
     objp[:, :2] = np.mgrid[0:columns, 0:rows].T.reshape(-1, 2) * squareSizeInMilimeters
 
@@ -80,7 +84,7 @@ if __name__ == "__main__":
         ret, corners = cv.findChessboardCorners(gray, (columns, rows), None)
 
         if ret:
-            corners2 = cv.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)           
+            corners2 = cv.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)
             objpoints.append(objp)
             imgpoints.append(corners2)
             if debugMode:
@@ -93,12 +97,15 @@ if __name__ == "__main__":
     start_time = time.time()
     ret, mtx, dist, rvecs, tvecs = cv.calibrateCamera(objpoints, imgpoints, img.shape[:2][::-1], None, None)
     end_time = time.time()
-    logging.info(f"Camera calibrated in {end_time - start_time:.2f} seconds with return value: {ret}")
+    logging.info(f"Camera calibrated in {end_time - start_time:.2f} seconds with return value: {ret:.2f}")
 
     mean_error = CalculateError(mtx, dist, rvecs, tvecs)
     SaveToJson(ret, mtx, dist, rvecs, tvecs, mean_error)
 
 
-    undistorted_img = UndistortPhoto(mtx, dist, "47.png")
-    remapped_image = RemappImage(mtx, dist, "47.png")
+    undistorted_img = UndistortPhoto(mtx, dist)
+    remapped_image = RemappImage(mtx, dist)
+
+    cv.imwrite('undistorted_image.png', undistorted_img)
+    cv.imwrite('remapped_image.png', remapped_image)
 
