@@ -44,7 +44,6 @@ def visualize_error_map(gt, pred, title="Error Map"):
 def save_disparity_map(disparity_map, filename):
     cv2.imwrite(filename, disparity_map)
 
-# Custom disparity computation function
 def compute_custom_disparity(left_img, right_img, block_size=5, disparity_range=64):
     if block_size % 2 == 0:
         block_size += 1
@@ -73,19 +72,18 @@ def compute_custom_disparity(left_img, right_img, block_size=5, disparity_range=
     disparity_map_normalized = np.uint8(disparity_map_normalized)
     return disparity_map_normalized
 
-# Load the images in grayscale
-left_img = cv2.imread("C:\\#Projects\\ZAOWIR\\Lab3\\GordonKolokwium\\left.png", cv2.IMREAD_GRAYSCALE)
-right_img = cv2.imread("C:\\#Projects\\ZAOWIR\\Lab3\\GordonKolokwium\\right.png", cv2.IMREAD_GRAYSCALE)
+
+left_img = cv2.imread("C:\\#Projects\\ZAOWIR\\Lab3\\GordonKolokwium\\Xleft.png", cv2.IMREAD_GRAYSCALE)
+right_img = cv2.imread("C:\\#Projects\\ZAOWIR\\Lab3\\GordonKolokwium\\Xright.png", cv2.IMREAD_GRAYSCALE)
 ground_truth = cv2.imread("C:\\#Projects\\ZAOWIR\\Lab3\\GordonKolokwium\\ground_truth.png", cv2.IMREAD_GRAYSCALE)
 
 if left_img is None or right_img is None or ground_truth is None:
     raise ValueError("Error loading images")
 
-# Histogram equalization
+
 left_img = cv2.equalizeHist(left_img)
 right_img = cv2.equalizeHist(right_img)
 
-# Compute disparity maps
 disparity_custom = compute_custom_disparity(left_img, right_img)
 
 stereo_bm = cv2.StereoBM_create(numDisparities=64, blockSize=11)
@@ -106,12 +104,11 @@ stereo_sgbm = cv2.StereoSGBM_create(
 disparity_sgbm = stereo_sgbm.compute(left_img, right_img)
 disparity_sgbm = cv2.normalize(disparity_sgbm, None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX).astype(np.uint8)
 
-# Save disparity maps
+
 save_disparity_map(disparity_custom, "disparity_custom.png")
 save_disparity_map(disparity_bm, "disparity_bm.png")
 save_disparity_map(disparity_sgbm, "disparity_sgbm.png")
 
-# Calculate error metrics and save error maps
 print("Custom MAE:", calculate_mae(ground_truth, disparity_custom))
 print("Custom RMSE:", calculate_rmse(ground_truth, disparity_custom))
 print("Custom Bad Pixel %:", calculate_bad_pixel(ground_truth, disparity_custom))
