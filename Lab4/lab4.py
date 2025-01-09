@@ -146,7 +146,7 @@ def write_ply(fn, verts, colors):
 if __name__ == "__main__":
 
     # Load calib data
-    calib_file = r"C:\#Projects\ZAOWIR\Lab4\calib.txt"
+    calib_file = r"C:\Projekty\ZAOWIR\Lab4\calib.txt"
     with open(calib_file, "r") as f:
         lines = f.readlines()
         cam0 = lines[0].strip().split("=")[1].strip("[]")
@@ -158,9 +158,9 @@ if __name__ == "__main__":
 
 
     # Zad 1
-    disparity_file = r"C:\#Projects\ZAOWIR\Lab4\disp0.pfm"
-    output_path_Zad1_disparity = r"C:\#Projects\ZAOWIR\Lab4\zad1_disparity.png"
-    output_path_Zad1_depth = r"C:\#Projects\ZAOWIR\Lab4\zad1_depth.png"
+    disparity_file = r"C:\Projekty\ZAOWIR\Lab4\disp0.pfm"
+    output_path_Zad1_disparity = r"C:\Projekty\ZAOWIR\Lab4\zad1_disparity.png"
+    output_path_Zad1_depth = r"C:\Projekty\ZAOWIR\Lab4\zad1_depth.png"
 
     disparity_map, scale = read_pfm(disparity_file)
     #display_disparity_map(disparity_map,'Disparity Map from PFM')
@@ -173,10 +173,10 @@ if __name__ == "__main__":
     cv2.imwrite(output_path_Zad1_depth, depth_map_8bit)
 
     # Zad 2
-    left_image_path = r"C:\#Projects\ZAOWIR\Lab4\im0.png"
-    right_image_path = r"C:\#Projects\ZAOWIR\Lab4\im1.png"
-    output_path_Zad2_disparity = r"C:\#Projects\ZAOWIR\Lab4\zad2_disparity.png"
-    output_path_Zad2_depth = r"C:\#Projects\ZAOWIR\Lab4\zad2_depth.png"
+    left_image_path = r"C:\Projekty\ZAOWIR\Lab4\im0.png"
+    right_image_path = r"C:\Projekty\ZAOWIR\Lab4\im1.png"
+    output_path_Zad2_disparity = r"C:\Projekty\ZAOWIR\Lab4\zad2_disparity.png"
+    output_path_Zad2_depth = r"C:\Projekty\ZAOWIR\Lab4\zad2_depth.png"
 
     # Calculate my disparity
     disparity_map_sgbm = compute_disparity_map_SGBM(left_image_path, right_image_path, min_disparity=0, num_disparities=256, block_size=9)
@@ -216,8 +216,8 @@ if __name__ == "__main__":
 
 
     # Zad 3
-    output_path_Zad3_depth_ref = r"C:\#Projects\ZAOWIR\Lab4\zad3_depth_ref.png"
-    output_path_Zad3_depth_sbgm  = r"C:\#Projects\ZAOWIR\Lab4\zad3_depth_sbgm.png"
+    output_path_Zad3_depth_ref = r"C:\Projekty\ZAOWIR\Lab4\zad3_depth_ref.png"
+    output_path_Zad3_depth_sbgm  = r"C:\Projekty\ZAOWIR\Lab4\zad3_depth_sbgm.png"
 
     depth_map_24bit = depth_map_normalize_24bit(depth_map)
     depth_map_24bit_sgbm = depth_map_normalize_24bit(depth_map_sgbm)
@@ -239,14 +239,14 @@ if __name__ == "__main__":
     plt.show()
 
     # Zad 4
-    output_path_Zad4_disparity = r"C:\#Projects\ZAOWIR\Lab4\zad4_disparity.png"
-    output_path_Zad4_depth = r"C:\#Projects\ZAOWIR\Lab4\zad4_depth.png"
+    output_path_Zad4_disparity = r"C:\Projekty\ZAOWIR\Lab4\zad4_disparity.png"
+    output_path_Zad4_depth = r"C:\Projekty\ZAOWIR\Lab4\zad4_depth.png"
 
     h_fov = 60
     image_width = 1920
     baseline = 0.1  #meters
     max_depth = 1000.0
-    depth_map_uint24 = cv2.imread(r"C:\#Projects\ZAOWIR\Lab4\depth.png", cv2.IMREAD_UNCHANGED)
+    depth_map_uint24 = cv2.imread(r"C:\Projekty\ZAOWIR\Lab4\depth.png", cv2.IMREAD_UNCHANGED)
     focal_length = (depth_map_uint24.shape[0] / 2) / np.tan(np.radians(h_fov) / 2)
 
     depth_map_zad4 = decode_uint24_depth_map(depth_map_uint24, max_depth)
@@ -275,8 +275,8 @@ if __name__ == "__main__":
 
 
     # Zad 5
-    input_file = r"C:\#Projects\ZAOWIR\Lab4\left.png"
-    output_path_Zad5_ply = r"C:\#Projects\ZAOWIR\Lab4\zad5.ply"
+    input_file = r"C:\Projekty\ZAOWIR\Lab4\left.png"
+    output_path_Zad5_ply = r"C:\Projekty\ZAOWIR\Lab4\zad5.ply"
 
     input_file_Zad5_1 = cv2.imread(input_file, 0)
     disparity_map_zad4_8bit = cv2.imread(output_path_Zad4_disparity, 0)

@@ -73,9 +73,9 @@ def compute_custom_disparity(left_img, right_img, block_size=5, disparity_range=
     return disparity_map_normalized
 
 
-left_img = cv2.imread("C:\\#Projects\\ZAOWIR\\Lab3\\GordonKolokwium\\Xleft.png", cv2.IMREAD_GRAYSCALE)
-right_img = cv2.imread("C:\\#Projects\\ZAOWIR\\Lab3\\GordonKolokwium\\Xright.png", cv2.IMREAD_GRAYSCALE)
-ground_truth = cv2.imread("C:\\#Projects\\ZAOWIR\\Lab3\\GordonKolokwium\\ground_truth.png", cv2.IMREAD_GRAYSCALE)
+left_img = cv2.imread("C:\\Projekty\\ZAOWIR\\Lab3\\GordonKolokwium\\Xleft.png", cv2.IMREAD_GRAYSCALE)
+right_img = cv2.imread("C:\\Projekty\\ZAOWIR\\Lab3\\GordonKolokwium\\Xright.png", cv2.IMREAD_GRAYSCALE)
+ground_truth = cv2.imread("C:\\Projekty\\ZAOWIR\\Lab3\\GordonKolokwium\\ground_truth.png", cv2.IMREAD_GRAYSCALE)
 
 if left_img is None or right_img is None or ground_truth is None:
     raise ValueError("Error loading images")
